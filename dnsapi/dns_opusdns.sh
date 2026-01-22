@@ -145,7 +145,7 @@ _get_zone() {
     fi
 
     _debug "Trying: $h"
-    if _opusdns_api GET "/v1/dns/$h" && _contains "$response" '"name"'; then
+    if _opusdns_api GET "/v1/dns/$h" && _contains "$response" '"dnssec_status"'; then
       _zone="$h"
       _record_name=$(printf "%s" "$domain" | cut -d . -f 1-"$p")
       [ -z "$_record_name" ] && _record_name="@"
