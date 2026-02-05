@@ -7,6 +7,7 @@ Options:
  KAS_Login API login name
  KAS_Authtype API auth type. Default: "plain"
  KAS_Authdata API auth data
+ KAS_OTP_Secret 2 Factor Authentication Shared Secret (optional requires oathtool)
 Issues: github.com/acmesh-official/acme.sh/issues/2715
 Author: squared GmbH <github@squaredgmbh.de>, Martin Kammerlander <martin.kammerlander@phlegx.com>, Marc-Oliver Lange <git@die-lang.es>
 '
