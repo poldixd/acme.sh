@@ -223,6 +223,7 @@ _get_record_id() {
 # Retrieve credential token
 _get_credential_token() {
   if [ -n "$KAS_OTP_Secret" ]; then
+    _info "[KAS] -> Authorising with OTP code..."
     if ! _exists oathtool; then
       _err "Please install oathtool to use 2 Factor Authentication."
       _err ""
@@ -232,9 +233,6 @@ _get_credential_token() {
     # Get OTP code with the defined secret.
     otp_code="$(oathtool --base32 --totp "${KAS_OTP_Secret}" 2>/dev/null)"
   fi
-
-
-
 
   baseParamAuth="\"kas_login\":\"$KAS_Login\""
   baseParamAuth="$baseParamAuth,\"kas_auth_type\":\"$KAS_Authtype\""
