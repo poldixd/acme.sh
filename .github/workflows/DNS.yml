@@ -71,11 +71,44 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y oathtool
     - name: Clone acmetest
       run: cd .. && git clone --depth=1 https://github.com/acmesh-official/acmetest.git  && cp -r acme.sh acmetest/
-    - name: Patch acmetest to install oathtool in container
+    - name: Patch plat.conf to install oathtool in container
       run: |
         cd ../acmetest
-        # Add oathtool installation before the test runs inside container
-        sed -i '/^_setup() {$/a \  if command -v apt-get >/dev/null 2>&1; then\n    apt-get update -qq && apt-get install -y -qq oathtool >/dev/null 2>&1 || true\n  fi' letest.sh
+        # Ubuntu
+        sed -i -E '/^-ubuntu\|/{/oathtool/! s/^(-ubuntu\|[^|]*\|[^|]*\|)([^|]*)(\|)$/\1\2,oathtool\3/}' plat.conf
+
+        # Debian
+        sed -i -E '/^-debian\|/{/oathtool/! s/^(-debian\|[^|]*\|[^|]*\|)([^|]*)(\|)$/\1\2,oathtool\3/}' plat.conf
+
+        # AlmaLinux
+        sed -i -E '/^-almalinux\|/{/oathtool/! s/^(-almalinux\|[^|]*\|[^|]*\|)([^|]*)(\|)$/\1\2,oathtool\3/}' plat.conf
+
+        # Fedora
+        sed -i -E '/^-fedora\|/{/oathtool/! s/^(-fedora\|[^|]*\|[^|]*\|)([^|]*)(\|)$/\1\2,oathtool\3/}' plat.conf
+
+        # openSUSE Leap (package: oath-toolkit)
+        sed -i -E '/^-opensuse\/leap\|/{/oath-toolkit/! s/^(-opensuse\/leap\|[^|]*\|[^|]*\|)([^|]*)(\|)$/\1\2,oath-toolkit\3/}' plat.conf
+
+        # Alpine (package: oath-toolkit)
+        sed -i -E '/^-alpine\|/{/oath-toolkit/! s/^(-alpine\|[^|]*\|[^|]*\|)([^|]*)(\|)$/\1\2,oath-toolkit\3/}' plat.conf
+
+        # Oracle Linux
+        sed -i -E '/^-oraclelinux\|/{/oathtool/! s/^(-oraclelinux\|[^|]*\|[^|]*\|)([^|]*)(\|)$/\1\2,oathtool\3/}' plat.conf
+
+        # Kali (no leading '-' in your file)
+        sed -i -E '/^kalilinux\/kali-last-release\|/{/oathtool/! s/^(kalilinux\/kali-last-release\|[^|]*\|[^|]*\|)([^|]*)(\|)$/\1\2,oathtool\3/}' plat.conf
+
+        # Arch (package: oath-toolkit)
+        sed -i -E '/^-archlinux\|/{/oath-toolkit/! s/^(-archlinux\|[^|]*\|[^|]*\|)([^|]*)(\|)$/\1\2,oath-toolkit\3/}' plat.conf
+
+        # Mageia (no leading '-' in your file)
+        sed -i -E '/^mageia\|/{/oathtool/! s/^(mageia\|[^|]*\|[^|]*\|)([^|]*)(\|?)$/\1\2,oathtool\3/}' plat.conf
+
+        # Gentoo (line may not end with '|', package: sys-auth/oath-toolkit)
+        sed -i -E '/^gentoo\/stage3\|/{/sys-auth\/oath-toolkit/! s/^(gentoo\/stage3\|[^|]*\|[^|]*\|[[:space:]]*)(.*)$/\1\2,sys-auth\/oath-toolkit/}' plat.conf
+
+        # TinyCore (package: oath-toolkit; adjust if needed)
+        sed -i -E '/^tatsushid\/tinycore\|/{/oath-toolkit/! s/^(tatsushid\/tinycore\|[^|]*\|[^|]*\|)([^|]*)(\|)$/\1\2,oath-toolkit\3/}' plat.conf
     - name: Set env file
       run: |
         cd ../acmetest
