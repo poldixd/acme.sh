@@ -117,10 +117,15 @@ jobs:
       TokenName5: ${{ secrets.TokenName5}}
     steps:
     - uses: actions/checkout@v6
-    - name: Install tools
-      run:  brew install socat oath-toolkit
     - name: Clone acmetest
       run: cd .. && git clone --depth=1 https://github.com/acmesh-official/acmetest.git  && cp -r acme.sh acmetest/
+    - name: Ensure oathtool in test container
+      run: |
+        cd ../acmetest
+        # Add oathtool installation to acmetest Dockerfile if it exists
+        if [ -f Dockerfile ]; then
+          sed -i 's/tzdata/tzdata oath-toolkit-oathtool/g' Dockerfile
+        fi
     - name: Run acmetest
       run: |
         if [ "${{ secrets.TokenName1}}" ] ; then
