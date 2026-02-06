@@ -239,6 +239,7 @@ _get_credential_token() {
   baseParamAuth="$baseParamAuth,\"session_lifetime\":600"
   baseParamAuth="$baseParamAuth,\"session_update_lifetime\":\"Y\""
 
+
   if [ -n "$otp_code" ]; then
     baseParamAuth="$baseParamAuth,\"session_2fa\":\"$otp_code\""
   fi
